@@ -52,7 +52,7 @@ this.state={ commands:{},
 componentDidMount() {
  //var term = this.refs.term.getDOMNode();
 
-// var term= ReactDOM.findDOMNode(this.refs.term)
+ const term= ReactDOM.findDOMNode(this.term)
  this.registerCommands();
  this.showIntroMsg();
  this.term.focus();
@@ -61,8 +61,10 @@ componentDidMount() {
 
 componentDidUpdate() {
  //var el = ReactDOM.findDOMNode(this.refs.term);
+ const el=ReactDOM.findDOMNode(this.term);
+ alert(el.scrollHeight);
  var container = document.getElementById("terminalbody");
- container.scrollTop = this.term.scrollHeight;
+ container.scrollTop = el.scrollHeight;
 }
 
 
@@ -83,10 +85,16 @@ addHistory(output) {
 clearHistory() {
   alert('before clear'+this.state.history);
   var history = this.state.history;
+  for(var i=0;i<history.length;i++)
+  {
+    history.pop();
+  }
   
-  this.setState={ 'history': [] };
+  this.setState={
+    'history': history
+  };
 
-  alert('after clear'+this.state.history);
+  alert(this.state.history);
 }
 
 registerCommands() {
@@ -112,13 +120,17 @@ registerCommands() {
     //var term=this.props.termr;
    // this.termr.focus();
    
+   
+   var term=ReactDOM.findDOMNode(this.term);
+   term.focus();
   }
 
  clearInput() {
     //this.refs.term.getDOMNode().value = "";
     //this.setState={term:''};
-    this.setState={term:''};
-    this.term=" ";
+    
+    this.term.focus();
+    this.term.value=" ";
 
 }
 
@@ -132,17 +144,19 @@ showHelp() {
 }
 
 
+
+
   render(){
-    
- let output = this.state.history.map(function(op,i) {
-     return <p  key={i}>{op}</p>
+
+ let output = this.state.history.map(function(op,index) {
+     return <p key={index}>{op}</p>
   });
 
     return(
       <div className='input-area' onClick={this.inputClick}>
       
        {output}
-       
+
       <p>
         <span className='textstyle'>{this.state.prompt}</span> 
         <input type="text" className='textstyle' onKeyPress={this.handleInput}  ref={(input) => { this.term = input; }}   />

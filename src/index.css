@@ -54,3 +54,10 @@ input[type=text]:focus {
 .holder {
   overflow: auto;
 }
+.prompt {
+  color: #d28445;
+} 
+
+#app, div.input-area {
+  height: 100%;
+}
