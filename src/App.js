@@ -29,20 +29,18 @@ this.state={ commands:{},
   handleInput(e) {
    if (e.key === "Enter") {
       
-        var input_text = e.target.value;
-        var input_array = input_text.split(' ');
-        var input = input_array[0];
-        var arg = input_array[1];
-        var command = this.state.commands[input];
+        var inputcmd = e.target.value.trim();
 
-        this.addHistory(this.state.prompt + " " + input_text);
+        var command = this.state.commands[inputcmd];
 
-        this.setState={term:e.target.value};
+        this.addHistory(this.state.prompt+" "+ inputcmd);
+
+        this.setState({term:e.target.value});
         
         if (command === undefined) {
-            this.addHistory("sh: command not found: " + input);
+            this.addHistory("sh: command not found: " + inputcmd);
         } else {
-            command(input_text);
+            command(inputcmd);
         }
         this.clearInput();
     }
@@ -50,9 +48,8 @@ this.state={ commands:{},
 
 
 componentDidMount() {
- //var term = this.refs.term.getDOMNode();
 
- const term= ReactDOM.findDOMNode(this.term)
+ const term= ReactDOM.findDOMNode(this)
  this.registerCommands();
  this.showIntroMsg();
  this.term.focus();
@@ -60,11 +57,10 @@ componentDidMount() {
 }
 
 componentDidUpdate() {
- //var el = ReactDOM.findDOMNode(this.refs.term);
- const el=ReactDOM.findDOMNode(this.term);
- alert(el.scrollHeight);
+
+ var el=ReactDOM.findDOMNode(this.term);
  var container = document.getElementById("terminalbody");
- container.scrollTop = el.scrollHeight;
+ container.scrollTop = el.scrollHeight+10;
 }
 
 
@@ -77,24 +73,19 @@ ViewLink(link) {
 addHistory(output) {
   var history = this.state.history;
   history.push(output)
-  this.setState={
+  this.setState({
     'history': history
-  };
+  });
 }
 
 clearHistory() {
-  alert('before clear'+this.state.history);
-  var history = this.state.history;
-  for(var i=0;i<history.length;i++)
-  {
-    history.pop();
-  }
   
-  this.setState={
-    'history': history
-  };
+  var history = this.state.history;
+  this.setState({
+    'history': []
+  });
 
-  alert(this.state.history);
+  
 }
 
 registerCommands() {
@@ -116,19 +107,11 @@ registerCommands() {
   }
 
   inputClick() {
-    //var term = React.getDOMNode(this.refs.term);
-    //var term=this.props.termr;
-   // this.termr.focus();
-   
-   
-   var term=ReactDOM.findDOMNode(this.term);
+   var term=ReactDOM.findDOMNode(this);
    term.focus();
   }
 
  clearInput() {
-    //this.refs.term.getDOMNode().value = "";
-    //this.setState={term:''};
-    
     this.term.focus();
     this.term.value=" ";
 
@@ -139,16 +122,14 @@ showHelp() {
   this.addHistory("github - view github profile");
   this.addHistory("portfolio - view my portfolio");
   this.addHistory("clear - clear screen");
-
- 
 }
 
 
 
 
   render(){
-
- let output = this.state.history.map(function(op,index) {
+console.log(this.state.history);
+ let output = this.state.history.map((op,index) => {
      return <p key={index}>{op}</p>
   });
 
