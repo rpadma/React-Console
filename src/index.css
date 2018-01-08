@@ -37,6 +37,8 @@ input[type=text]{
   border: none;
   padding: 0; 
   outline: none;
+  color: black;
+  font-size: 15px;
   font-family: sans-serif;
 }
 

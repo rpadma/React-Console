@@ -29,13 +29,14 @@
 
 .textstyle
 {
-  font-size: 15px;
+  font-size: 15x;
   font-family: sans-serif;
+  color:#f45942;
 }
 
 p{
   margin: 0px;
-  line-height: 25px;
+  line-height: 18px;
   font-size: 15px;
   font-family: sans-serif;
 }
